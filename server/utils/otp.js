@@ -58,7 +58,8 @@ async function sendOTPEmail(email, otp) {
     });
     return true;
   } catch (error) {
-    console.error('Email send error:', error.message);
+    console.error('❌ Resend full error:', JSON.stringify(error, null, 2));
+    console.error('❌ Resend error message:', error.message);
     console.log(`📧 OTP for ${email}: ${otp}`);
     return true;
   }
