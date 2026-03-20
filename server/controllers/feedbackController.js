@@ -1,5 +1,6 @@
 const { Feedback } = require('../models');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
+const resend = new Resend(process.env.RESEND_API_KEY);
 require('dotenv').config();
 
 // POST /api/feedback
@@ -19,13 +20,8 @@ exports.submitFeedback = async (req, res) => {
 
     // Send notification email
     try {
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
-      });
-
-      await transporter.sendMail({
-        from: `"MockTest Feedback" <${process.env.EMAIL_USER}>`,
+      await resend.emails.send({
+        from: 'MockTest Platform <onboarding@resend.dev>',
         to: process.env.EMAIL_USER,
         subject: `New Feedback from ${name}`,
         html: `
@@ -35,7 +31,7 @@ exports.submitFeedback = async (req, res) => {
           <p><strong>Message:</strong> ${message}</p>
           <p><strong>Date:</strong> ${new Date().toLocaleString()}</p>
         `,
-      });
+});
     } catch (emailErr) {
       console.log('Feedback email notification failed:', emailErr.message);
     }
