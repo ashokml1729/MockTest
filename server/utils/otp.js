@@ -38,6 +38,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 async function sendOTPEmail(email, otp) {
   try {
+    console.log(`📨 Attempting to send OTP email to: ${email}`);
     await resend.emails.send({
       from: 'MockTest Platform <onboarding@resend.dev>',
       to: email,
