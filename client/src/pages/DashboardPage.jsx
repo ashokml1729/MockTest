@@ -47,7 +47,7 @@ export default function DashboardPage() {
               <h3>{exam.name}</h3>
               <p>{exam.description}</p>
             </div>
-            <div className="exam-card-tests">{exam.totalTests} Tests</div>
+            <div className="exam-card-tests">{exam.totalTests} Phases</div>
           </Link>
         ))}
       </div>
