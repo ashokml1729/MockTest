@@ -84,7 +84,6 @@ export default function Navbar() {
         ) : (
           <>
             <Link to="/login" className={`btn btn-outline btn-sm ${isActive('/login')}`}>Login</Link>
-            <Link to="/register" className="btn btn-primary btn-sm">Register</Link>
           </>
         )}
       </div>
