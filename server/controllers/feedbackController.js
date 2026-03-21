@@ -1,6 +1,14 @@
 const { Feedback } = require('../models');
-const { Resend } = require('resend');
-const resend = new Resend(process.env.RESEND_API_KEY);
+const nodemailer = require('nodemailer');
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 require('dotenv').config();
 
 // POST /api/feedback
@@ -20,8 +28,8 @@ exports.submitFeedback = async (req, res) => {
 
     // Send notification email
     try {
-      await resend.emails.send({
-        from: 'MockTest Platform <onboarding@resend.dev>',
+      await transporter.sendMail({
+        from: `"MockTest Feedback" <${process.env.EMAIL_USER}>`,
         to: process.env.EMAIL_USER,
         subject: `New Feedback from ${name}`,
         html: `

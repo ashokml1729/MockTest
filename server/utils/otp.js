@@ -33,14 +33,22 @@ function verifyOTP(email, otp) {
 }
 
 // Create transporter (will use preview in dev if no credentials)
-const { Resend } = require('resend');
-const resend = new Resend(process.env.RESEND_API_KEY);
+const nodemailer = require('nodemailer');
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
 async function sendOTPEmail(email, otp) {
   try {
     console.log(`📨 Attempting to send OTP email to: ${email}`);
-    await resend.emails.send({
-      from: 'MockTest Platform <onboarding@resend.dev>',
+    await transporter.sendMail({
+      from: `"MockTest Platform" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: 'Your OTP for MockTest Platform',
       html: `
