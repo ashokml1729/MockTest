@@ -4,10 +4,6 @@ const passport = require('passport');
 const authController = require('../controllers/authController');
 const { authMiddleware } = require('../middleware/auth');
 
-router.post('/register', authController.register);
-router.post('/verify-otp', authController.verifyRegisterOTP);
-router.post('/login', authController.login);
-router.post('/login-verify', authController.loginVerify);
 router.get('/me', authMiddleware, authController.getMe);
 
 // Google OAuth
