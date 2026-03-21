@@ -1,14 +1,6 @@
 const { Feedback } = require('../models');
-const nodemailer = require('nodemailer');
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+const { Resend } = require('resend');
+const resend = new Resend(process.env.RESEND_API_KEY);
 require('dotenv').config();
 
 // POST /api/feedback
@@ -28,18 +20,17 @@ exports.submitFeedback = async (req, res) => {
 
     // Send notification email
     try {
-      await transporter.sendMail({
-        from: `"MockTest Feedback" <${process.env.EMAIL_USER}>`,
-        to: process.env.EMAIL_USER,
-        subject: `New Feedback from ${name}`,
+      await resend.emails.send({
+        from: 'onboarding@resend.dev',  // use this until you verify your domain
+        to: process.env.EMAIL_USER,     // your gmail — admin notification
+        subject: 'New Feedback Received - MockTest',
         html: `
-          <h3>New Feedback Received</h3>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Message:</strong> ${message}</p>
-          <p><strong>Date:</strong> ${new Date().toLocaleString()}</p>
-        `,
-});
+          <h2>New Feedback</h2>
+          <p><b>Name:</b> ${name}</p>
+          <p><b>Email:</b> ${email}</p>
+          <p><b>Message:</b> ${message}</p>
+        `
+      });
     } catch (emailErr) {
       console.log('Feedback email notification failed:', emailErr.message);
     }
